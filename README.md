@@ -1,5 +1,8 @@
 DayTrader on Red Hat JBoss EAP
 ==============================
+
+Forked project, made changes to the jms destinations to work on on premise EAP 7 and set a context root as well.
+
 This project is a port of the Apache Geronimo project's DayTrader application to run on [JBoss EAP](https://developers.redhat.com/products/eap/overview/) 6 (Java EE 6)
 and JBoss EAP 7 (Java EE 7). It can be built and deployed to a standalone JBoss EAP instance or deployed to
 [Red Hat OpenShift](https://access.redhat.com/documentation/en/openshift-container-platform/) using the supplied OpenShift template.
@@ -131,6 +134,28 @@ If you are using the supplied OpenShift template, then the database, users and p
         <entry name="jms/TradeStreamerTopic"/>
     </jms-topic>
 </jms-destinations>
+
+For EAP 7, 
+<jms-queue name="TradeBrokerQueue" entries="queue/TradeBrokerQueue jms/queue/TradeBrokerQueue java:jboss/exported/jms/queue/TradeBrokerQueue"/>
+<jms-topic name="TradeStreamerTopic" entries="topic/TradeStreamerTopic jms/topic/TradeStreamerTopic java:jboss/exported/jms/topic/TradeStreamerTopic"/>
+
+
+```
+
+Context Root
+--------------
+
+Edit `javaee6/assemblies/daytrader-ear/src/main/resources/META-INF/application.xml` to set the context root as it is defaulted to root
+
+```
+  <module>
+    <web>
+      <web-uri>web.war</web-uri>
+      <context-root>daytrader</context-root>
+    </web>
+  </module>
+
+
 ```
 
 Build and deploy the app to JBoss EAP
